@@ -17,12 +17,12 @@ class NodeContainer extends Component {
             showControls: false
         }
 
-        this.handleChildClick = this.handleChildClick.bind(this);
+        this.handleClick = this.handleClick.bind(this);
         this.handleMouseEnter = this.handleMouseEnter.bind(this);
         this.handleMouseLeave = this.handleMouseLeave.bind(this);
     }
 
-    handleChildClick() {
+    handleClick() {
         this.setState({
             childrenVisible: !this.state.childrenVisible
         });
@@ -50,7 +50,6 @@ class NodeContainer extends Component {
         const hasChildrenClass = children.length === 0 ? '' : 'has-children ';
 
         return (
-
             <div className={"node-container " + hasChildrenClass} key={id} style={containerStyle}>
                 <Node id={id}
                     name={name}
@@ -58,25 +57,22 @@ class NodeContainer extends Component {
                     valueType={valueType}
                     value={value}
                     children={children}
-                    onClick={this.handleChildClick}
+                    onClick={this.handleClick}
                     onMouseEnter={this.handleMouseEnter}
                     onMouseLeave={this.handleMouseLeave}
                     showControls={this.state.showControls} />
 
                 <SmoothCollapse expanded={this.state.childrenVisible}>
-                    <TransitionGroup>
-
+                    <TransitionGroup> 
                         {
                             children.map(child => <CSSTransition
                                 key={child.id}
                                 classNames="fade"
                                 timeout={{ enter: 400, exit: 400 }} ><NodeContainer key={child.id} {...child} indent={true} /></CSSTransition>)
                         }
-
                     </TransitionGroup>
                 </SmoothCollapse>
             </div>
-
         );
     }
 }

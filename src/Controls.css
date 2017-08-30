@@ -18,8 +18,11 @@ div.controls > a {
 }
 
 div.controls a img {
-    vertical-align: middle;  
     opacity: 0.5;  
+}
+
+div.controls img {
+    vertical-align: middle;  
 }
 
 div.controls a:hover img {

@@ -6,6 +6,7 @@ import edit from './edit.svg';
 import remove from './remove.svg';
 import confirm from './confirm.svg';
 import cancel from './cancel.svg';
+import trash from'./trash.svg';
 import './Controls.css';
 
 function MainControls({ visible, onAdd, onRemove, onEdit }) {
@@ -37,7 +38,7 @@ class ConfirmControls extends Component {
         const { onConfirm, onCancel } = this.props;
         return (
             <div className="controls">
-                <span >delete?</span>
+                <span ><img src={trash} width="20" alt="delete" /></span>
                 <a onClick={onConfirm} ><img src={confirm} width="12" alt="confirm" /> </a>
                 <a onClick={onCancel} ><img src={cancel} width="12" alt="cancel" /> </a>
             </div>
