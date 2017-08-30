@@ -1,0 +1,11 @@
+div.tree {
+    text-align: left;
+    max-width: 95%;
+    margin: 10px auto;
+}
+
+.tree * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}

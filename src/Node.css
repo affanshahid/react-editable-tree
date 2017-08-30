@@ -1,0 +1,126 @@
+div.tree-node {
+    max-width: 400px;
+    background-color: #FFF;
+    border-radius: 5px;
+    margin: 4px 0;
+    box-shadow: gray 2px 1px 5px;
+    text-align: center;
+    display: flex;
+    max-height: 23px;
+    align-items: stretch;
+    cursor: pointer;
+    position: relative;
+}
+
+div.tree-node.jungle:before {
+    width: 0;
+}
+
+/* Node Name */
+
+div.tree-node span.name {
+    font-size: 10px;
+    padding: 3px 8px 3px 8px;
+    font-weight: bold;
+    background-color: black;
+    color: rgba(255, 255, 255, 0.90);
+    border-top-left-radius: 5px;    
+    border-bottom-left-radius: 5px;
+    flex-basis: content;
+}
+
+
+div.tree-node.jungle span.name {
+    color: yellow;
+}
+
+
+div.tree-node.sensor span.name {
+    color: #00DD00;
+}
+
+
+div.tree-node.sensorgroup span.name {
+    color: #5B5BF6;
+}
+
+div.tree-node.parameter span.name {
+    color: #DB49DB;
+}
+
+div.tree-node.query span.name {
+    color: #FF1116;
+}
+/* Node Value */
+
+div.tree-node span.value {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-basis: 10%;
+    flex-grow: 2;
+    padding: 3px 8px;
+        border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+div.tree-node.jungle span.value {
+    border: 1px solid yellow;
+}
+
+div.tree-node.sensor span.value{
+    border: 1px solid #00DD00;
+}
+div.tree-node.sensorgroup span.value{
+    border: 1px solid #5B5BF6;
+}
+div.tree-node.parameter span.value{
+    border: 1px solid #DB49DB;
+}
+div.tree-node.query span.value{
+    border: 1px solid #FF1116;
+}
+
+
+/* Node Type */
+
+div.tree-node span.type {
+    font-size: 10px;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 3px 8px;
+    background-color: #FFA700;
+    color: #000;
+    font-weight: bold;
+    flex-basis: content;
+}
+
+div.tree-node span.novalue-type {
+    flex-grow: 1;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+
+div.tree-node.jungle span.type {
+    background-color: yellow;
+}
+
+
+div.tree-node.sensor span.type {
+    background-color: #00DD00;
+}
+
+div.tree-node.sensorgroup span.type {
+    background-color: #5B5BF6;
+}
+
+div.tree-node.parameter span.type {
+    background-color: #DB49DB;
+}
+
+div.tree-node.query span.type {
+    background-color: #FF1116;
+}

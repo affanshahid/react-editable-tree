@@ -1,0 +1,32 @@
+div.tree-node.jungle > div.controls > a:nth-child(2), div.tree-node.jungle > div.controls > a:nth-child(3) {
+    display: none;
+}
+
+div.controls {
+    position: absolute;
+    right: -80px;
+    width: 80px;
+    cursor: default;
+}
+
+div.controls>* {
+    margin: 0 3px;
+}
+
+div.controls > a {
+    cursor: pointer;    
+}
+
+div.controls a img {
+    vertical-align: middle;  
+    opacity: 0.5;  
+}
+
+div.controls a:hover img {
+    opacity: 0.8;
+}
+
+div.controls span {
+    font-size: 10px;
+    opacity: 0.8;
+}
