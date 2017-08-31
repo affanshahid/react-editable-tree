@@ -13,6 +13,11 @@ class ControlsContainer extends Component {
 
         this.handleCancel = this.handleCancel.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+    }
+
+    handleClickOutside(ev) {
+        this.handleCancel(ev)
     }
 
     handleCancel(ev) {
@@ -27,7 +32,6 @@ class ControlsContainer extends Component {
             removeConfirmation: true
         });
         ev.stopPropagation();
-
     }
 
     render() {
@@ -39,7 +43,8 @@ class ControlsContainer extends Component {
             onEdit={handleEdit} />
 
         const confirmRemoveControls = <ConfirmControls
-            ref={controls => {this.controls = controls; console.log(this.controls)}}
+            disableOnClickOutside={!this.state.removeConfirmation}
+            handleClickOutside={this.handleClickOutside}
             onConfirm={handleConfirmRemove}
             onCancel={this.handleCancel} />
 
@@ -54,7 +59,6 @@ function handleAdd(ev, dispatch, id) {
 }
 
 function handleConfirmRemove(ev, dispatch, id) {
-
     console.log('removed ' + id);
     ev.stopPropagation();
     dispatch(removeNode(id));

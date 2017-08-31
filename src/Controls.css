@@ -26,7 +26,7 @@ div.controls img {
 }
 
 div.controls a:hover img {
-    opacity: 0.8;
+    opacity: 1;
 }
 
 div.controls span {

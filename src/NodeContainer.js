@@ -13,7 +13,7 @@ class NodeContainer extends Component {
         super(props);
 
         this.state = {
-            childrenVisible: true,
+            childrenVisible: false,
             showControls: false
         }
 

@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { bool, func } from 'prop-types';
-import onClickOutside from 'react-onclickoutside'
+import onClickOutside from 'react-onclickoutside';
 import add from './add.svg';
 import edit from './edit.svg';
 import remove from './remove.svg';
 import confirm from './confirm.svg';
 import cancel from './cancel.svg';
-import trash from'./trash.svg';
+import trash from './trash.svg';
 import './Controls.css';
 
 function MainControls({ visible, onAdd, onRemove, onEdit }) {
@@ -29,29 +29,23 @@ MainControls.propTypes = {
     onEdit: func.isRequired
 };
 
-class ConfirmControls extends Component {
-    handleClickOutside(ev) {
-        this.props.onCancel(ev);
-    }
-
-    render() {
-        const { onConfirm, onCancel } = this.props;
-        return (
-            <div className="controls">
-                <span ><img src={trash} width="20" alt="delete" /></span>
-                <a onClick={onConfirm} ><img src={confirm} width="12" alt="confirm" /> </a>
-                <a onClick={onCancel} ><img src={cancel} width="12" alt="cancel" /> </a>
-            </div>
-        );
-    }
+function ConfirmControls({ onConfirm, onCancel }) {
+    return (
+        <div className="controls">
+            <span ><img src={trash} width="16" alt="delete" /></span>
+            <a onClick={onConfirm} ><img src={confirm} width="12" alt="confirm" /> </a>
+            <a onClick={onCancel} ><img src={cancel} width="12" alt="cancel" /> </a>
+        </div>
+    );
 }
+
+//eslint-disable-next-line
+ConfirmControls = onClickOutside(ConfirmControls);
 
 ConfirmControls.propTypes = {
     onConfirm: func.isRequired,
     onCancel: func.isRequired
 }
-
-ConfirmControls = onClickOutside(ConfirmControls);
 
 export {
     MainControls,
