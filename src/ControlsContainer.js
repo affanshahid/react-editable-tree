@@ -52,7 +52,7 @@ class ControlsContainer extends Component {
 
     handleCancelRemove(ev) {
         this.setState({
-            removeConfirmation: confirmationModes.none
+            confirmationMode: confirmationModes.none
         });
         ev.stopPropagation();
     }

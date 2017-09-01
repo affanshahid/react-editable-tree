@@ -1,0 +1,37 @@
+div.editable-tree-node {
+    max-width: 400px;
+    background-color: #FFF;
+    border-radius: 5px;
+    margin: 4px 0;
+    box-shadow: gray 2px 1px 5px;
+    text-align: center;
+    display: flex;
+    align-items: stretch;
+    cursor: pointer;
+    position: relative;
+    flex-wrap: wrap;
+    
+}
+
+div.editable-tree-node textarea {
+    resize: vertical;
+    text-align: center;
+    max-height: 80px;
+    
+}
+
+div.editable-tree-node textarea.name {
+    flex-basis: 25%;
+}
+
+div.editable-tree-node textarea.type {
+    flex-basis: 25%;
+}
+
+div.editable-tree-node textarea.value {
+    flex-grow: 1;
+}
+
+div.editable-tree-node select {
+    flex-basis: 50%;
+}
