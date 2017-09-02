@@ -1,6 +1,6 @@
 import React from 'react';
 import { string, func, bool } from 'prop-types';
-import ControlsContainer from './ControlsContainer'
+import { ControlsContainer } from '../containers';
 import './Node.css';
 
 function Node({

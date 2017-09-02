@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { func, string, bool } from 'prop-types';
 import { connect } from 'react-redux';
-import { addNode, removeNode, editNode } from './actions';
-import { MainControls, ConfirmControls } from './Controls';
+import { addNode, removeNode, editNode } from '../actions';
+import { MainControls, ConfirmControls } from '../components';
 import './ControlsContainer.css';
 
 export const confirmationModes = {

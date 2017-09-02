@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import SmoothCollapse from 'react-smooth-collapse';
 import { string, array, bool } from 'prop-types';
-import Node from './Node';
-import EditableNode from './EditableNode'
+import { Node, EditableNode } from '../components';
 import CSSTransition from 'react-transition-group/CSSTransition';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import './NodeContainer.css';

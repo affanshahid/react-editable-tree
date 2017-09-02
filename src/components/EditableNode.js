@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { func, string } from 'prop-types';
-import ControlsContainer, { confirmationModes } from './ControlsContainer';
+import { ControlsContainer,  confirmationModes } from '../containers';
 import './EditableNode.css';
 
 class EditableNode extends Component {

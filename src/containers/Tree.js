@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import NodeContainer from './NodeContainer';
+import { NodeContainer } from './';
 import { connect } from 'react-redux';
 import './Tree.css';
 

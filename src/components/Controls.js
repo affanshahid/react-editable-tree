@@ -1,12 +1,7 @@
 import React from 'react';
 import { bool, func } from 'prop-types';
 import onClickOutside from 'react-onclickoutside';
-import add from './add.svg';
-import edit from './edit.svg';
-import remove from './remove.svg';
-import confirm from './confirm.svg';
-import cancel from './cancel.svg';
-import trash from './trash.svg';
+import { add, edit, remove, confirm, cancel, trash } from '../images';
 import './Controls.css';
 
 function MainControls({ visible, onAdd, onRemove, onEdit }) {
