@@ -23,7 +23,7 @@ div.tree-node span.name {
     padding: 3px 8px 3px 8px;
     font-weight: bold;
     background-color: black;
-    color: rgba(255, 255, 255, 0.90);
+    color: rgb(255, 255, 255);
     border-top-left-radius: 5px;    
     border-bottom-left-radius: 5px;
     flex-basis: content;
