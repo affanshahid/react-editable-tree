@@ -1,18 +1,29 @@
 import React from 'react';
-import { string, array, func, bool } from 'prop-types';
+import { string, func, bool } from 'prop-types';
 import ControlsContainer from './ControlsContainer'
 import './Node.css';
 
-function Node({ id, name, type, valueType, value, children, onClick, onMouseEnter, onMouseLeave , showControls }) {
+function Node({
+    id,
+    name,
+    type,
+    valueType,
+    value,
+    onClick,
+    onMouseEnter,
+    onMouseLeave,
+    showControls,
+    onBeginEdit
+}) {
     const noValueClass = value !== '' ? 'value' : 'novalue';
     return (
         <div className={`tree-node ${type.toLowerCase()}`} onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-            <span className="name">{name}</span>
-            <span className={'type ' + noValueClass + '-type'}>{type}</span>            
+            <span className="name">{name === '' ? 'Node Name' : name}</span>
+            <span className={'type ' + noValueClass + '-type'}>{type === '' ? 'Node Type' : type}</span>
             <span className={noValueClass}>
                 {value}
             </span>
-            <ControlsContainer visible={showControls} id={id} />
+            <ControlsContainer onBeginEdit={onBeginEdit} visible={showControls} id={id} />
         </div>
     );
 }
@@ -23,11 +34,11 @@ Node.propTypes = {
     type: string.isRequired,
     valueType: string.isRequired,
     value: string.isRequired,
-    children: array.isRequired,
     onClick: func.isRequired,
     onMouseEnter: func.isRequired,
     onMouseLeave: func.isRequired,
-    showControls: bool.isRequired
-}
+    showControls: bool.isRequired,
+    onBeginEdit: func
+};
 
 export default Node;

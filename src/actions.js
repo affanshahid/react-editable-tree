@@ -20,3 +20,16 @@ export const removeNode = (id) => {
         id
     };
 }
+
+export const editNode = (id, name, type, valueType, value) => {
+    return {
+        type: 'EDIT_NODE',
+        id,
+        node: {
+            name,
+            type,
+            valueType,
+            value
+        }
+    };
+}

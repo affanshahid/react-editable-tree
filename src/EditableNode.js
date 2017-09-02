@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { func, string } from 'prop-types';
+import ControlsContainer, { confirmationModes } from './ControlsContainer';
 import './EditableNode.css';
 
 class EditableNode extends Component {
@@ -7,10 +8,10 @@ class EditableNode extends Component {
         super(props);
 
         this.state = {
-            name: '',
-            type: '',
-            value: '',
-            valueType: '0'
+            name: this.props.name,
+            type: this.props.type,
+            value: this.props.value,
+            valueType: this.props.valueType
         }
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -52,6 +53,7 @@ class EditableNode extends Component {
     }
 
     render() {
+        const { onEndEdit, id } = this.props;
         return (
             <div className="editable-tree-node">
                 <textarea onChange={this.handleNameChange} className="name" placeholder="Name" value={this.state.name} />
@@ -61,11 +63,32 @@ class EditableNode extends Component {
                     <option>integer</option>
                     <option>double</option>
                 </select>
-                <textarea onChange={this.handleTypeChange} className="type" placeholder="Type" value={this.state.type}/>
-                <textarea onChange={this.handleValueChange} className="value" placeholder="Value" value={this.state.value}/>
+                <textarea onChange={this.handleTypeChange} className="type" placeholder="Type" value={this.state.type} />
+                <textarea onChange={this.handleValueChange} className="value" placeholder="Value" value={this.state.value} />
+                <ControlsContainer 
+                    disableOnClickOutside={true}
+                    onEndEdit={onEndEdit} visible={true} 
+                    id={id} 
+                    defaultConfirmationMode={confirmationModes.edit} 
+                    {...this.state} />
             </div>
         );
     }
+}
+
+EditableNode.propTypes = {
+    onEndEdit: func.isRequired,
+    id: string,
+    name: string,
+    type: string,
+    typeValue: string
+};
+
+EditableNode.defaultProps = {
+    id: '',
+    name: '',
+    type: '',
+    typeValue: '0'
 }
 
 export default EditableNode;

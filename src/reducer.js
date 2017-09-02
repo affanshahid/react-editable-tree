@@ -9,6 +9,7 @@ function removeNode(arr, node) {
 }
 
 const nodeList = (state = createMockData(5), action) => {
+    let newState;
     switch (action.type) {
         case 'ADD_NODE': 
             return [
@@ -16,9 +17,17 @@ const nodeList = (state = createMockData(5), action) => {
                 ...state
             ];
         case 'REMOVE_NODE': 
-            const newState = state.clone();
+            newState = state.clone();
             const nodeToRemove = newState.filter(n => n.id === action.id)[0];
             removeNode(newState, nodeToRemove);
+            return newState;
+        case 'EDIT_NODE':
+            newState = state.clone();
+            const nodeToEdit = newState.filter(n => n.id === action.id)[0];
+            nodeToEdit.name = action.node.name;
+            nodeToEdit.value = action.node.value;
+            nodeToEdit.valueType = action.node.valueType;
+            nodeToEdit.type = action.node.type;
             return newState;
         default:
             return state;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SmoothCollapse from 'react-smooth-collapse';
 import { string, array, bool } from 'prop-types';
 import Node from './Node';
+import EditableNode from './EditableNode'
 import CSSTransition from 'react-transition-group/CSSTransition';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import './NodeContainer.css';
@@ -14,12 +15,27 @@ class NodeContainer extends Component {
 
         this.state = {
             childrenVisible: false,
-            showControls: false
+            showControls: false,
+            editMode: false
         }
 
         this.handleClick = this.handleClick.bind(this);
         this.handleMouseEnter = this.handleMouseEnter.bind(this);
         this.handleMouseLeave = this.handleMouseLeave.bind(this);
+        this.handleBeginEdit = this.handleBeginEdit.bind(this);
+        this.handleEndEdit = this.handleEndEdit.bind(this);
+    }
+
+    handleBeginEdit() {
+        this.setState({
+            editMode: true
+        });
+    }
+
+    handleEndEdit() {
+        this.setState({
+            editMode: false
+        });
     }
 
     handleClick() {
@@ -51,19 +67,30 @@ class NodeContainer extends Component {
 
         return (
             <div className={"node-container " + hasChildrenClass} key={id} style={containerStyle}>
-                <Node id={id}
-                    name={name}
-                    type={type}
-                    valueType={valueType}
-                    value={value}
-                    children={children}
-                    onClick={this.handleClick}
-                    onMouseEnter={this.handleMouseEnter}
-                    onMouseLeave={this.handleMouseLeave}
-                    showControls={this.state.showControls} />
+                {
+                    this.state.editMode ?
+                        <EditableNode
+                            id={id}
+                            name={name}
+                            type={type}
+                            valueType={valueType}
+                            value={value}
+                            onEndEdit={this.handleEndEdit} />
 
+                        : <Node id={id}
+                            name={name}
+                            type={type}
+                            valueType={valueType}
+                            value={value}
+                            onClick={this.handleClick}
+                            onMouseEnter={this.handleMouseEnter}
+                            onMouseLeave={this.handleMouseLeave}
+                            showControls={this.state.showControls}
+                            onBeginEdit={this.handleBeginEdit} />
+
+                }
                 <SmoothCollapse expanded={this.state.childrenVisible}>
-                    <TransitionGroup> 
+                    <TransitionGroup>
                         {
                             children.map(child => <CSSTransition
                                 key={child.id}

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
+import { func, string, bool } from 'prop-types';
 import { connect } from 'react-redux';
-import { addNode, removeNode } from './actions';
+import { addNode, removeNode, editNode } from './actions';
 import { MainControls, ConfirmControls } from './Controls';
 import './ControlsContainer.css';
 
-const confirmationModes = {
+export const confirmationModes = {
     remove: "REMOVE_MODE",
     edit: 'EDIT_MODE',
     none: 'NONE'
@@ -15,7 +15,7 @@ class ControlsContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            confirmationMode: confirmationModes.none
+            confirmationMode: this.props.defaultConfirmationMode
         };
 
         this.handleCancel = this.handleCancel.bind(this);
@@ -38,7 +38,7 @@ class ControlsContainer extends Component {
         this.setState({
             confirmationMode: confirmationModes.none
         });
-        this.props.onCancelEdit();
+        this.props.onEndEdit();
         ev.stopPropagation();
     }
 
@@ -74,6 +74,7 @@ class ControlsContainer extends Component {
                 this.setState({
                     confirmationMode: confirmationModes.none
                 });
+                this.props.onEndEdit();
                 break;
             default:
                 throw new Error("Unexpected state for ControlsContainer");
@@ -95,7 +96,7 @@ class ControlsContainer extends Component {
     }
 
     render() {
-        const { handleAdd, visible } = this.props;
+        const { handleAdd, visible, disableOnClickOutside } = this.props;
         const mainControls = <MainControls
             visible={visible}
             onAdd={handleAdd}
@@ -103,7 +104,7 @@ class ControlsContainer extends Component {
             onEdit={this.handleEdit} />
 
         const confirmRemoveControls = <ConfirmControls
-            disableOnClickOutside={this.state.confirmationMode === confirmationModes.none}
+            disableOnClickOutside={disableOnClickOutside || this.state.confirmationMode === confirmationModes.none}
             handleClickOutside={this.handleClickOutside}
             onConfirm={this.handleConfirm}
             onCancel={this.handleCancel} />
@@ -116,21 +117,25 @@ ControlsContainer.propTypes = {
     handleAdd: func.isRequired,
     handleConfirmRemove: func.isRequired,
     handleConfirmEdit: func.isRequired,
-    onCancelEdit: func,
-    onBeginEdit: func
+    defaultConfirmationMode: string,
+    onEndEdit: func,
+    onBeginEdit: func,
+    disableOnClickOutside: bool
 }
 
 ControlsContainer.defaultProps = {
     onBeginEdit: () => {},
-    onCancelEdit: () => {}
+    onEndEdit: () => {},
+    defaultConfirmationMode: confirmationModes.none,
+    disableOnClickOutside: false
 }
 
-function mapDispatchToProps(dispatch, { visible, id, onCancelEdit, onBeginEdit }) {
+function mapDispatchToProps(dispatch, { visible, id, name, type, valueType, value, onEndEdit, onBeginEdit }) {
     return {
         handleAdd: ev => {
             console.log('added to ' + id);
             ev.stopPropagation();
-            dispatch(addNode("New Node Name", "Parameter", "string", "This is a value", id));
+            dispatch(addNode("", "", "0", "", id));
         },
         handleConfirmRemove: ev => {
             console.log('removed ' + id);
@@ -140,9 +145,10 @@ function mapDispatchToProps(dispatch, { visible, id, onCancelEdit, onBeginEdit }
         handleConfirmEdit: ev => {
             console.log('edited ' + id);
             ev.stopPropagation();
+            dispatch(editNode(id, name, type, valueType, value));
         },
         visible,
-        onCancelEdit,
+        onEndEdit,
         onBeginEdit
     };
 }

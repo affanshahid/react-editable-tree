@@ -7,9 +7,7 @@ import './index.css';
 import App from './App';
 import './extensions';
 
-import EditableNode from './EditableNode';
-
 let store = createStore(nodeList);
 
-ReactDOM.render(<div><Provider store={store}><App /></Provider><EditableNode /></div>, document.getElementById('root'));
+ReactDOM.render(<div><Provider store={store}><App /></Provider></div>, document.getElementById('root'));
 

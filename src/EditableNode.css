@@ -15,11 +15,14 @@ div.editable-tree-node {
 
 div.editable-tree-node textarea {
     resize: none;
-    text-align: center;
+    /* text-align: center; */
     border: none;
     font-size: 11px;
     margin: 0;
+    font-family: sans-serif;    
     outline: none;
+    padding: 3px 8px 3px 8px;
+    
 }
 
 div.editable-tree-node textarea.name {
