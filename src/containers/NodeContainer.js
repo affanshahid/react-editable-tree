@@ -12,7 +12,7 @@ class NodeContainer extends Component {
         super(props);
 
         this.state = {
-            childrenVisible: false,
+            childrenVisible: props.children.length === 0,
             showControls: false,
             editMode: false
         }
@@ -37,6 +37,7 @@ class NodeContainer extends Component {
     }
 
     handleClick() {
+        if (this.props.children.length === 0) return;
         this.setState({
             childrenVisible: !this.state.childrenVisible
         });
@@ -55,7 +56,7 @@ class NodeContainer extends Component {
     }
 
     render() {
-        const { id, name, type, valueType, value, children, indent } = this.props;
+        const { id, name, type, valueType, value, children, indent, parentId } = this.props;
 
         const containerStyle = {
             marginLeft: indent ? indentSpacing : 0,
@@ -80,6 +81,7 @@ class NodeContainer extends Component {
                             type={type}
                             valueType={valueType}
                             value={value}
+                            parentId={parentId}
                             onClick={this.handleClick}
                             onMouseEnter={this.handleMouseEnter}
                             onMouseLeave={this.handleMouseLeave}

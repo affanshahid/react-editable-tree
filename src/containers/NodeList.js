@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { array, func } from 'prop-types';
+import { array, func, object, string } from 'prop-types';
 import CSSTransition from 'react-transition-group/CSSTransition';
 import TransitionGroup from 'react-transition-group/TransitionGroup';
 import { DropTarget } from 'react-dnd';
@@ -13,8 +13,9 @@ class NodeList extends Component {
         return this.props.connectDropTarget(
             <div className="node-list">
                 {
-                    this.props.isOver && <div className="placeholder" />
+                    this.props.isOver && this.props.parentId !== this.props.dropItem.id  &&this.props.parentId !== this.props.dropItem.fromParent && <div className="placeholder" />
                 }
+                <div style={{width: 400, height: 1 }} />
                 <TransitionGroup>
                     {
                         this.props.children.map(child => <CSSTransition
@@ -30,21 +31,29 @@ class NodeList extends Component {
 
 NodeList.propTypes = {
     children: array.isRequired,
-    handleMoveNode: func.isRequired
+    handleMoveNode: func.isRequired,
+    parentId: string.isRequired,
+    dropItem: object
+}
+
+NodeList.defaultProps = {
+    dropItem: { fromParent: '-1', id: '-1' }
 }
 
 const NodeListTarget = {
-    drop: function ({ handleMoveNode }, monitor) {
+    drop: function ({ handleMoveNode, parentId }, monitor) {
         if (monitor.didDrop()) return;
-        const { id } = monitor.getItem();
-        handleMoveNode(id);
+        const { id, fromParent } = monitor.getItem();
+        if (id !== parentId && fromParent !== parentId)
+            handleMoveNode(id);
     }
 }
 
 function collect(connect, monitor) {
     return {
         isOver: monitor.isOver({ shallow: true }),
-        connectDropTarget: connect.dropTarget()
+        connectDropTarget: connect.dropTarget(),
+        dropItem: monitor.getItem()
     }
 }
 
@@ -57,7 +66,8 @@ function mapDispatchToProps(dispatch, { parentId }) {
                 dispatch(copyNode(id, parentId))
             else
                 dispatch(moveNode(id, parentId))
-        }
+        },
+        parentId
     }
 }
 

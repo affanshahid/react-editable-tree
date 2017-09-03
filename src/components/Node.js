@@ -52,8 +52,8 @@ Node.propTypes = {
 };
 
 const nodeSource = {
-    beginDrag: function ({ id }) {
-        return { id }
+    beginDrag: function ({ id, parentId }) {
+        return { id, fromParent: parentId }
     }
 }
 
