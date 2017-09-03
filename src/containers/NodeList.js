@@ -9,10 +9,6 @@ import { moveNode, copyNode } from '../actions';
 import './NodeList.css';
 
 class NodeList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return this.props.connectDropTarget(
             <div className="node-list">
