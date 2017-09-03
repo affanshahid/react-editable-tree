@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import SmoothCollapse from 'react-smooth-collapse';
 import { string, array, bool } from 'prop-types';
 import { Node, EditableNode } from '../components';
-import CSSTransition from 'react-transition-group/CSSTransition';
-import TransitionGroup from 'react-transition-group/TransitionGroup';
+import { NodeList } from './';
 import './NodeContainer.css';
 
 const indentSpacing = 20;
@@ -89,14 +88,9 @@ class NodeContainer extends Component {
 
                 }
                 <SmoothCollapse expanded={this.state.childrenVisible}>
-                    <TransitionGroup>
-                        {
-                            children.map(child => <CSSTransition
-                                key={child.id}
-                                classNames="fade"
-                                timeout={{ enter: 400, exit: 400 }} ><NodeContainer key={child.id} {...child} indent={true} /></CSSTransition>)
-                        }
-                    </TransitionGroup>
+                    <NodeList parentId={id}>
+                        {children}
+                    </NodeList>
                 </SmoothCollapse>
             </div>
         );
@@ -116,5 +110,6 @@ NodeContainer.propTypes = {
 NodeContainer.defaultProps = {
     indent: false
 }
+
 
 export default NodeContainer;

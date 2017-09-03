@@ -33,3 +33,20 @@ export const editNode = (id, name, type, valueType, value) => {
         }
     };
 }
+
+export const moveNode = (nodeId, newParentId) => {
+    return {
+        type: 'MOVE_NODE',
+        id: nodeId,
+        newParentId
+    }
+}
+
+export const copyNode = (nodeId, toParentId) => {
+    return {
+        type: 'COPY_NODE',
+        id: nodeId,
+        newNodeId: String(nextId++),
+        toParentId
+    }
+}

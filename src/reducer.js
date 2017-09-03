@@ -11,12 +11,12 @@ function removeNode(arr, node) {
 const nodeList = (state = createMockData(5), action) => {
     let newState;
     switch (action.type) {
-        case 'ADD_NODE': 
+        case 'ADD_NODE':
             return [
                 action.node,
                 ...state
             ];
-        case 'REMOVE_NODE': 
+        case 'REMOVE_NODE':
             newState = state.clone();
             const nodeToRemove = newState.filter(n => n.id === action.id)[0];
             removeNode(newState, nodeToRemove);
@@ -28,6 +28,27 @@ const nodeList = (state = createMockData(5), action) => {
             nodeToEdit.value = action.node.value;
             nodeToEdit.valueType = action.node.valueType;
             nodeToEdit.type = action.node.type;
+            return newState;
+        case 'MOVE_NODE':
+            newState = state.clone();
+            const nodeToMove = newState.filter(n => n.id === action.id)[0];
+            newState.remove(nodeToMove);
+            nodeToMove.parentId = action.newParentId;
+            newState = [
+                nodeToMove,
+                ...newState
+            ];
+            return newState;
+        case 'COPY_NODE':
+            newState = state.clone();
+            const nodeToCopy = newState.filter(n => n.id === action.id)[0];
+            const newNode = {...nodeToCopy};
+            newNode.id = action.newNodeId;
+            newNode.parentId = action.toParentId;
+            newState = [
+                newNode,
+                ...newState
+            ];
             return newState;
         default:
             return state;

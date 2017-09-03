@@ -1,6 +1,7 @@
 import React from 'react';
 import { string, func, bool } from 'prop-types';
 import { ControlsContainer } from '../containers';
+import { DragSource } from 'react-dnd';
 import './Node.css';
 
 function Node({
@@ -13,11 +14,18 @@ function Node({
     onMouseEnter,
     onMouseLeave,
     showControls,
-    onBeginEdit
+    onBeginEdit,
+    connectDragSource,
+    isDragging
 }) {
     const noValueClass = value !== '' ? 'value' : 'novalue';
-    return (
-        <div className={`tree-node ${type.toLowerCase()}`} onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    return connectDragSource(
+        <div className={`tree-node ${type.toLowerCase()}`}
+            onClick={onClick}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            style={{opacity: isDragging? 0.5: 1}}>
+            
             <span className="name">{name === '' ? 'Node Name' : name}</span>
             <span className={'type ' + noValueClass + '-type'}>{type === '' ? 'Node Type' : type}</span>
             <span className={noValueClass}>
@@ -38,7 +46,25 @@ Node.propTypes = {
     onMouseEnter: func.isRequired,
     onMouseLeave: func.isRequired,
     showControls: bool.isRequired,
+    connectDragSource: func.isRequired,
+    isDragging: bool.isRequired,
     onBeginEdit: func
 };
+
+const nodeSource = {
+    beginDrag: function ({ id }) {
+        return { id }
+    }
+}
+
+function collect(connect, monitor) {
+    return {
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging()
+    }
+}
+
+//eslint-disable-next-line
+Node = DragSource('NODE', nodeSource, collect)(Node);
 
 export default Node;

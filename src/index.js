@@ -9,5 +9,12 @@ import './extensions';
 
 let store = createStore(nodeList);
 
-ReactDOM.render(<div><Provider store={store}><App /></Provider></div>, document.getElementById('root'));
+ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 
+window.addEventListener('keydown', function(ev) {
+    window.controlPressed = ev.ctrlKey
+});
+
+window.addEventListener('keyup', function(ev) {
+    window.controlPressed = ev.ctrlKey
+});

@@ -1,0 +1,7 @@
+div.node-list div.placeholder {
+    height: 23px;
+    width: 400px;
+    border-radius: 5px;
+    border: 2px dashed gray;
+    margin-left: 20px;
+}
