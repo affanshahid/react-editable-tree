@@ -13,7 +13,6 @@ class Tree extends Component {
         matched[root.id] = root;
         toMatch.remove(root);
         while (toMatch.length !== 0) {
-            console.log(toMatch)
             const matchedKeys = Object.keys(matched);
             const matchedChildren = toMatch.filter(n => matchedKeys.includes(n.parentId));
             for (let child of matchedChildren) {
