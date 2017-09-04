@@ -1,10 +1,7 @@
-let nextId = 10;
-
 export const addNode = (name, type, valueType, value, parentId) => {
     return {
         type: 'ADD_NODE',
         node: {
-            id: String(nextId++),
             name,
             type,
             valueType,
@@ -46,7 +43,6 @@ export const copyNode = (nodeId, toParentId) => {
     return {
         type: 'COPY_NODE',
         id: nodeId,
-        newNodeId: String(nextId++),
         toParentId
     }
 }

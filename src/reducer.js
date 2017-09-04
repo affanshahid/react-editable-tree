@@ -1,5 +1,7 @@
 const { random, floor } = Math;
 
+let nextId = 10;
+
 function removeNode(arr, node) {
     const children = arr.filter(n => n.parentId === node.id);
     children.forEach(child => {
@@ -8,10 +10,22 @@ function removeNode(arr, node) {
     arr.remove(node);
 }
 
+function copyNode(arr, nodeToCopy, to) {
+    const newNode = { ...nodeToCopy };
+    newNode.id = String(nextId++);
+    newNode.parentId = to;
+    arr.unshift(newNode);
+    const children = arr.filter(n => n.parentId === nodeToCopy.id);
+    children.forEach(child => {
+        copyNode(arr, child, newNode.id);
+    });
+}
+
 const nodeList = (state = createMockData(5), action) => {
     let newState;
     switch (action.type) {
         case 'ADD_NODE':
+            action.node.id = String(nextId++);
             return [
                 action.node,
                 ...state
@@ -42,13 +56,7 @@ const nodeList = (state = createMockData(5), action) => {
         case 'COPY_NODE':
             newState = state.clone();
             const nodeToCopy = newState.filter(n => n.id === action.id)[0];
-            const newNode = {...nodeToCopy};
-            newNode.id = action.newNodeId;
-            newNode.parentId = action.toParentId;
-            newState = [
-                newNode,
-                ...newState
-            ];
+            copyNode(newState, nodeToCopy, action.toParentId)
             return newState;
         default:
             return state;

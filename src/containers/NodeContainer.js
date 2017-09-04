@@ -147,10 +147,11 @@ function isDescendant(children, nodeId) {
 }
 
 const NodeContainerTarget = {
-    drop: function ({ handleMoveNode }, monitor) {
+    drop: function ({ handleMoveNode, handleCopyNode }, monitor) {
         if (monitor.didDrop()) return;
         const { id } = monitor.getItem();
-        handleMoveNode(id);
+        if (window.controlPressed) handleCopyNode(id);
+        else handleMoveNode(id);
     },
 
     canDrop: function (props, monitor) {
@@ -173,11 +174,11 @@ NodeContainer = DropTarget(['NODE'], NodeContainerTarget, collectTarget)(NodeCon
 function mapDispatchToProps(dispatch, props) {
     return {
         handleMoveNode: id => {
-            if (window.controlPressed)
-                dispatch(copyNode(id, props.id))
-            else
-                dispatch(moveNode(id, props.id))
+            dispatch(moveNode(id, props.id))
         },
+        handleCopyNode: id => {
+            dispatch(copyNode(id, props.id))
+        }
     }
 }
 
