@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import SmoothCollapse from 'react-smooth-collapse';
-import { string, array, bool } from 'prop-types';
+import { string, array, bool, func } from 'prop-types';
 import { Node, EditableNode, NodeList, PlaceholderNode } from '../components';
-import { DropTarget } from 'react-dnd';
+import { DropTarget, DragSource } from 'react-dnd';
 import { connect } from 'react-redux';
 import { moveNode, copyNode } from '../actions';
 import './NodeContainer.css';
@@ -58,7 +58,7 @@ class NodeContainer extends Component {
     }
 
     render() {
-        const { id, name, type, valueType, value, children, indent, parentId, connectDropTarget, isOver } = this.props;
+        const { id, name, type, valueType, value, children, indent, parentId, connectDragSource, connectDropTarget, isOver, isDragging } = this.props;
 
         const containerStyle = {
             marginLeft: indent ? indentSpacing : 0,
@@ -78,17 +78,20 @@ class NodeContainer extends Component {
                             value={value}
                             onEndEdit={this.handleEndEdit} />
 
-                        : <Node id={id}
-                            name={name}
-                            type={type}
-                            valueType={valueType}
-                            value={value}
-                            parentId={parentId}
-                            onClick={this.handleClick}
-                            onMouseEnter={this.handleMouseEnter}
-                            onMouseLeave={this.handleMouseLeave}
-                            showControls={this.state.showControls}
-                            onBeginEdit={this.handleBeginEdit} />
+                        : connectDragSource(<div>
+                            <Node id={id}
+                                faded={isDragging}
+                                name={name}
+                                type={type}
+                                valueType={valueType}
+                                value={value}
+                                parentId={parentId}
+                                onClick={this.handleClick}
+                                onMouseEnter={this.handleMouseEnter}
+                                onMouseLeave={this.handleMouseLeave}
+                                showControls={this.state.showControls}
+                                onBeginEdit={this.handleBeginEdit} />
+                        </div>)
 
                 }
                 <PlaceholderNode visible={isOver} />
@@ -109,11 +112,38 @@ NodeContainer.propTypes = {
     valueType: string.isRequired,
     value: string.isRequired,
     children: array.isRequired,
+    connectDragSource: func.isRequired,
+    connectDropTarget: func.isRequired,
+    isOver: bool.isRequired,
+    isDragging: bool.isRequired,
     indent: bool
 }
 
 NodeContainer.defaultProps = {
     indent: false
+}
+
+const nodeSource = {
+    beginDrag: function ({ id, parentId, children }) {
+        return { id, fromParent: parentId, children }
+    }
+}
+
+function collectSource(connect, monitor) {
+    return {
+        connectDragSource: connect.dragSource(),
+        isDragging: monitor.isDragging()
+    }
+}
+
+NodeContainer = DragSource('NODE', nodeSource, collectSource)(NodeContainer);
+
+function isDescendant(children, nodeId) {
+    for (let child of children) {
+        if (child.id === nodeId) return true;
+        if (isDescendant(child.children, nodeId)) return true;
+    }
+    return false;
 }
 
 const NodeContainerTarget = {
@@ -125,20 +155,20 @@ const NodeContainerTarget = {
 
     canDrop: function (props, monitor) {
         const dropItem = monitor.getItem();
-        if (dropItem.id === props.id || dropItem.fromParent === props.id) return false
+        if (dropItem.id === props.id || props.id === dropItem.fromParent || isDescendant(dropItem.children, props.id)) return false;
 
-        return true && monitor.isOver({ shallow: true });
+        return monitor.isOver({ shallow: true });
     }
 }
 
-function collect(connect, monitor) {
+function collectTarget(connect, monitor) {
     return {
         isOver: monitor.isOver({ shallow: true }) && monitor.canDrop(),
         connectDropTarget: connect.dropTarget(),
     }
 }
 
-NodeContainer = DropTarget(['NODE'], NodeContainerTarget, collect)(NodeContainer);
+NodeContainer = DropTarget(['NODE'], NodeContainerTarget, collectTarget)(NodeContainer);
 
 function mapDispatchToProps(dispatch, props) {
     return {
