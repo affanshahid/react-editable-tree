@@ -24,10 +24,10 @@ MainControls.propTypes = {
     onEdit: func.isRequired
 };
 
-function ConfirmControls({ onConfirm, onCancel }) {
+function ConfirmControls({ onConfirm, onCancel, editMode }) {
     return (
         <div className="controls">
-            <span ><img src={trash} width="16" alt="delete" /></span>
+            <span ><img src={editMode ? edit : trash} width="16" alt={editMode ? 'edit' : 'delete'} /></span>
             <a onClick={onConfirm} ><img src={confirm} width="12" alt="confirm" /> </a>
             <a onClick={onCancel} ><img src={cancel} width="12" alt="cancel" /> </a>
         </div>

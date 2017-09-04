@@ -104,6 +104,7 @@ class ControlsContainer extends Component {
             onEdit={this.handleEdit} />
 
         const confirmRemoveControls = <ConfirmControls
+            editMode={this.state.confirmationMode === confirmationModes.edit}
             disableOnClickOutside={disableOnClickOutside || this.state.confirmationMode === confirmationModes.none}
             handleClickOutside={this.handleClickOutside}
             onConfirm={this.handleConfirm}
