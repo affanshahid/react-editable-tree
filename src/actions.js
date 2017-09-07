@@ -31,11 +31,11 @@ export const editNode = (id, name, type, valueType, value) => {
     };
 }
 
-export const moveNode = (nodeId, newParentId) => {
+export const moveNode = (nodeId, toParentId) => {
     return {
         type: 'MOVE_NODE',
         id: nodeId,
-        newParentId
+        toParentId
     }
 }
 

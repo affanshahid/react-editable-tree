@@ -1,129 +1,129 @@
-const { random, floor } = Math;
-
 let nextId = 10;
 
-function removeNode(arr, node) {
-    const children = arr.filter(n => n.parentId === node.id);
-    children.forEach(child => {
-        removeNode(arr, child);
-    });
-    arr.remove(node);
-}
-
-function copyNode(arr, nodeToCopy, to) {
-    const newNode = { ...nodeToCopy };
-    newNode.id = String(nextId++);
-    newNode.parentId = to;
-    arr.unshift(newNode);
-    const children = arr.filter(n => n.parentId === nodeToCopy.id);
-    children.forEach(child => {
-        copyNode(arr, child, newNode.id);
-    });
-}
-
-const nodeList = (state = createMockData(5), action) => {
+const reducer = (state = {}, action) => {
     let newState;
+    let index;
+    let parentId;
     switch (action.type) {
         case 'ADD_NODE':
-            action.node.id = String(nextId++);
-            return [
-                action.node,
-                ...state
-            ];
-        case 'REMOVE_NODE':
-            newState = state.clone();
-            const nodeToRemove = newState.filter(n => n.id === action.id)[0];
-            removeNode(newState, nodeToRemove);
+            const id = String(nextId++);
+            newState = {
+                ...state,
+                [id]: { ...action.node, id, children: [] },
+            };
+            if (action.node.parentId) {
+                newState[action.node.parentId] = {
+                    ...state[action.node.parentId],
+                    children: [
+                        id,
+                        ...state[action.node.parentId].children
+                    ]
+                }
+            }
             return newState;
+
+        case 'REMOVE_NODE':
+            parentId = state[action.id].parentId;
+            if (parentId) {
+                const siblings = state[parentId].children;
+                index = siblings.indexOf(action.id);
+                newState = {
+                    ...state,
+                    [parentId]: {
+                        ...state[parentId],
+                        children: [
+                            ...siblings.slice(0, index),
+                            ...siblings.slice(index + 1)
+                        ]
+                    }
+                };
+            } else {
+                newState = { ...state };
+            }
+
+            const removeKeys = (state, node) => {
+                let newState = { ...state };
+                for (let childId of node.children) {
+                    newState = removeKeys(newState, state[childId]);
+                }
+                return Object.removeKey(newState, node.id);
+            }
+
+            newState = removeKeys(newState, state[action.id]);
+            return newState;
+
         case 'EDIT_NODE':
-            newState = state.clone();
-            const nodeToEdit = newState.filter(n => n.id === action.id)[0];
-            nodeToEdit.name = action.node.name;
-            nodeToEdit.value = action.node.value;
-            nodeToEdit.valueType = action.node.valueType;
-            nodeToEdit.type = action.node.type;
+            newState = {
+                ...state,
+                [action.id]: {
+                    ...state[action.id],
+                    ...action.node
+                }
+            };
             return newState;
         case 'MOVE_NODE':
-            newState = state.clone();
-            const nodeToMove = newState.filter(n => n.id === action.id)[0];
-            newState.remove(nodeToMove);
-            nodeToMove.parentId = action.newParentId;
-            newState = [
-                nodeToMove,
-                ...newState
-            ];
+            newState = {
+                ...state,
+                [action.id]: {
+                    ...state[action.id],
+                    parentId: action.toParentId
+                }
+            };
+            const oldParentId = state[action.id].parentId;
+            if (oldParentId) {
+                const oldSiblings = state[oldParentId].children;
+                const index = oldSiblings.indexOf(action.id);
+                newState[oldParentId] = {
+                    ...state[oldParentId],
+                    children: [
+                        ...oldSiblings.slice(0, index),
+                        ...oldSiblings.slice(index + 1)
+                    ]
+                };
+            }
+            newState[action.toParentId] = {
+                ...state[action.toParentId],
+                children: [
+                    action.id,
+                    ...state[action.toParentId].children
+                ]
+            }
+
             return newState;
+
         case 'COPY_NODE':
-            newState = state.clone();
-            const nodeToCopy = newState.filter(n => n.id === action.id)[0];
-            copyNode(newState, nodeToCopy, action.toParentId)
+            const copyNode = (state, node, parentId) => {
+                const id = String(nextId++);
+                let newState = {
+                    ...state,
+                    [id]: {
+                        ...node,
+                        id,
+                        parentId,
+                        children: []
+                    }
+                };
+                
+                for (let childId of node.children) {
+                    newState = copyNode(newState, state[childId], id);
+                }
+
+                newState[parentId] = {
+                    ...state[parentId],
+                    children: [
+                        id,
+                        ...state[parentId].children
+                    ]
+                }
+
+                return newState;
+            }
+            newState = copyNode(state, state[action.id], action.toParentId);
             return newState;
+
         default:
             return state;
     }
 }
 
-function createMockData(count) {
-    const types = ['Sensor', 'SensorGroup', 'Query', 'Parameter'];
-    const names = [
-        'Avaya',
-        'Cisco',
-        'CPU Performance Counter',
-        'Hard Disk Free Space',
-        'ETC',
-        'ECL',
-        'AI Sensor'
-    ]
-    const values = [
-        "401",
-        "SELECT name, email, username, password from users where id = 4;",
-        "% Free Disk Space",
-        ""
-    ]
-    const data = [];
-    data.push({
-        id: '0',
-        name: 'Jungle',
-        type: 'Jungle',
-        value: '',
-        valueType: 'string',
-        parentId: null
-    });
-
-    for (let i = 1; i <= count; i++) {
-        data.push({
-            id: String(i),
-            name: names.random(),
-            type: types.random(),
-            value: values.random(),
-            valueType: 'double',
-            parentId: '0'
-        });
-        const childCount = floor(random() * 5);
-        for (let j = 0; j < childCount; j++) {
-            data.push({
-                id: `${i}-${j}`,
-                name: names.random(),
-                type: types.random(),
-                value: values.random(),
-                valueType: 'double',
-                parentId: String(i)
-            });
-            const childCount = floor(random() * 5);
-            for (let k = 0; k < childCount; k++) {
-                data.push({
-                    id: `${i}-${j}-${k}`,
-                    name: names.random(),
-                    type: types.random(),
-                    value: values.random(),
-                    valueType: 'double',
-                    parentId: `${i}-${j}`
-                });
-            }
-        }
-    }
-
-    return data;
-}
-
-export default nodeList;
+export default reducer;

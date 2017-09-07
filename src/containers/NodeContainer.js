@@ -124,8 +124,8 @@ NodeContainer.defaultProps = {
 }
 
 const nodeSource = {
-    beginDrag: function ({ id, parentId, children }) {
-        return { id, fromParent: parentId, children }
+    beginDrag: function ({ id, parentId }) {
+        return { id, fromParent: parentId }
     }
 }
 
@@ -138,14 +138,6 @@ function collectSource(connect, monitor) {
 
 NodeContainer = DragSource('NODE', nodeSource, collectSource)(NodeContainer);
 
-function isDescendant(children, nodeId) {
-    for (let child of children) {
-        if (child.id === nodeId) return true;
-        if (isDescendant(child.children, nodeId)) return true;
-    }
-    return false;
-}
-
 const NodeContainerTarget = {
     drop: function ({ handleMoveNode, handleCopyNode }, monitor) {
         if (monitor.didDrop()) return;
@@ -156,7 +148,7 @@ const NodeContainerTarget = {
 
     canDrop: function (props, monitor) {
         const dropItem = monitor.getItem();
-        if (dropItem.id === props.id || props.id === dropItem.fromParent || isDescendant(dropItem.children, props.id)) return false;
+        if (dropItem.id === props.id || props.id === dropItem.fromParent || props.isDescendant(dropItem.id)) return false;
 
         return monitor.isOver({ shallow: true });
     }
@@ -171,6 +163,22 @@ function collectTarget(connect, monitor) {
 
 NodeContainer = DropTarget(['NODE'], NodeContainerTarget, collectTarget)(NodeContainer);
 
+function mapStateToProps(state, props) {
+    const isDescendant = (checkId, ofId) => {
+        const children = state[ofId].children;
+        for (let childId of children) {
+            if (childId === checkId) return true;
+            if (isDescendant(checkId, childId)) return true;
+        }
+        return false;
+    }
+    return {
+        children: props.children.map(id => state[id]),
+        isDescendant: isDescendant.bind(null, props.id)
+
+    }
+}
+
 function mapDispatchToProps(dispatch, props) {
     return {
         handleMoveNode: id => {
@@ -182,6 +190,6 @@ function mapDispatchToProps(dispatch, props) {
     }
 }
 
-NodeContainer = connect(null, mapDispatchToProps)(NodeContainer);
+NodeContainer = connect(mapStateToProps, mapDispatchToProps)(NodeContainer);
 
 export default NodeContainer;

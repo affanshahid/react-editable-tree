@@ -29,28 +29,6 @@ div.tree-node span.name {
     flex-basis: content;
 }
 
-
-div.tree-node.jungle span.name {
-    color: yellow;
-}
-
-
-div.tree-node.sensor span.name {
-    color: #00DD00;
-}
-
-
-div.tree-node.sensorgroup span.name {
-    color: #5B5BF6;
-}
-
-div.tree-node.parameter span.name {
-    color: #DB49DB;
-}
-
-div.tree-node.query span.name {
-    color: #FF1116;
-}
 /* Node Value */
 
 div.tree-node span.value {
@@ -103,24 +81,60 @@ div.tree-node span.novalue-type {
     border-bottom-right-radius: 5px;
 }
 
+/* 
+
+ ██████╗ ██████╗ ██╗      ██████╗ ██████╗ ███████╗
+██╔════╝██╔═══██╗██║     ██╔═══██╗██╔══██╗██╔════╝
+██║     ██║   ██║██║     ██║   ██║██████╔╝███████╗
+██║     ██║   ██║██║     ██║   ██║██╔══██╗╚════██║
+╚██████╗╚██████╔╝███████╗╚██████╔╝██║  ██║███████║
+ ╚═════╝ ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+                                                  
+*/
 
 div.tree-node.jungle span.type {
     background-color: yellow;
 }
+
+div.tree-node.jungle span.name {
+    color: yellow;
+}
+
 
 
 div.tree-node.sensor span.type {
     background-color: #00DD00;
 }
 
+div.tree-node.sensor span.name {
+    color: #00DD00;
+}
+
+
+
 div.tree-node.sensorgroup span.type {
     background-color: #5B5BF6;
 }
 
+div.tree-node.sensorgroup span.name {
+    color: #5B5BF6;
+}
+
+
+
 div.tree-node.parameter span.type {
     background-color: #DB49DB;
 }
+div.tree-node.parameter span.name {
+    color: #DB49DB;
+}
+
+
 
 div.tree-node.query span.type {
     background-color: #FF1116;
+}
+
+div.tree-node.query span.name {
+    color: #FF1116;
 }
