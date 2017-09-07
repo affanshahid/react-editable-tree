@@ -19,7 +19,6 @@ function NodeList(props) {
     );
 }
 
-
 NodeList.propTypes = {
     children: array.isRequired,
 }

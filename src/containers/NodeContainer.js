@@ -59,7 +59,7 @@ class NodeContainer extends Component {
 
     render() {
         const { id, name, type, valueType, value, children, indent, parentId, connectDragSource, connectDropTarget, isOver, isDragging } = this.props;
-
+        
         const containerStyle = {
             marginLeft: indent ? indentSpacing : 0,
         };
@@ -173,7 +173,7 @@ function mapStateToProps(state, props) {
         return false;
     }
     return {
-        children: props.children.map(id => state[id]),
+        children: props.children.map(id => state[id]).filter(c => c!= null),
         isDescendant: isDescendant.bind(null, props.id)
 
     }
