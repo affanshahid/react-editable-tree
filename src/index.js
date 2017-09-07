@@ -6,12 +6,10 @@ import reducer from './reducer';
 import './index.css';
 import { App } from './containers';
 import './extensions';
-import { fetchConfigs } from './api';
+import { createMockData } from './utils';
 
-fetchConfigs().then(configs => {
-    let store = createStore(reducer, configs);
-    ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
-})
+let store = createStore(reducer, createMockData(5));
+ReactDOM.render(<Provider store={store}><App /></Provider>, document.getElementById('root'));
 
 window.addEventListener('keydown', function (ev) {
     if (window.navigator.platform.includes('Mac'))
